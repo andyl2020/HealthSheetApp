@@ -1,9 +1,11 @@
+import 'package:best_flutter_ui_templates/hotel_booking/model/health_app_fields_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'range_slider_view.dart';
 import 'slider_view.dart';
 import 'hotel_app_theme.dart';
 import 'model/popular_filter_list.dart';
+import 'model/health_app_fields_list.dart';
 
 class FiltersScreen extends StatefulWidget {
   @override
@@ -15,6 +17,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
       PopularFilterListData.popularFList;
   List<PopularFilterListData> accomodationListData =
       PopularFilterListData.accomodationList;
+  List<HealthAppFieldsListData> healthAppYesNoQuestionsList =
+      HealthAppFieldsListData.healthAppYesNoQuestionsList;
 
   RangeValues _values = const RangeValues(100, 600);
   double distValue = 50.0;
@@ -44,7 +48,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     const Divider(
                       height: 1,
                     ),
-                    allAccommodationUI()
+                    allAccommodationUI(),
+                    const Divider(
+                      height: 1,
+                    ),
+                    morningRoutineUI(),
+                    const Divider(
+                      height: 1,
+                    ),
+                    healthAppCheckBoxGroup(),
                   ],
                 ),
               ),
@@ -102,7 +114,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       children: <Widget>[
         Padding(
           padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+          const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
           child: Text(
             'Type of Accommodation',
             textAlign: TextAlign.left,
@@ -124,6 +136,37 @@ class _FiltersScreenState extends State<FiltersScreen> {
       ],
     );
   }
+
+  Widget morningRoutineUI() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding:
+          const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+          child: Text(
+            'Morning Routine Options',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.grey,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16, left: 16),
+          child: Column(
+            children: getAccomodationListUI(),
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+      ],
+    );
+  }
+
 
   List<Widget> getAccomodationListUI() {
     final List<Widget> noList = <Widget>[];
@@ -188,7 +231,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       }
     } else {
       accomodationListData[index].isSelected =
-          !accomodationListData[index].isSelected;
+      !accomodationListData[index].isSelected;
 
       int count = 0;
       for (int i = 0; i < accomodationListData.length; i++) {
@@ -215,7 +258,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       children: <Widget>[
         Padding(
           padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+          const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
           child: Text(
             'Distance from city center',
             textAlign: TextAlign.left,
@@ -245,7 +288,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       children: <Widget>[
         Padding(
           padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+          const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
           child: Text(
             'Popular filters',
             textAlign: TextAlign.left,
@@ -316,6 +359,102 @@ class _FiltersScreenState extends State<FiltersScreen> {
             ),
           ));
           if (count < popularFilterListData.length - 1) {
+            count += 1;
+          } else {
+            break;
+          }
+        } catch (e) {
+          print(e);
+        }
+      }
+      noList.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: listUI,
+      ));
+    }
+    return noList;
+  }
+
+  Widget healthAppCheckBoxGroup() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding:
+          const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+          child: Text(
+            'Popular filters',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.grey,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16, left: 16),
+          child: Column(
+            children: getHealthAppYesNoQuestions(),
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        )
+      ],
+    );
+  }
+
+  List<Widget> getHealthAppYesNoQuestions() {
+    final List<Widget> noList = <Widget>[];
+    int count = 0;
+    const int columnCount = 1;
+    for (int i = 0; i < healthAppYesNoQuestionsList.length / columnCount; i++) {
+      final List<Widget> listUI = <Widget>[];
+      for (int i = 0; i < columnCount; i++) {
+        try {
+          final HealthAppFieldsListData date = healthAppYesNoQuestionsList[count];
+          listUI.add(Expanded(
+            child: Row(
+              children: <Widget>[
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                    onTap: () {
+                      setState(() {
+                        date.isSelected = !date.isSelected;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            date.isSelected
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            color: date.isSelected
+                                ? HotelAppTheme.buildLightTheme().primaryColor
+                                : Colors.grey.withOpacity(0.6),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            date.titleTxt,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ));
+          if (count < healthAppYesNoQuestionsList.length - 1) {
             count += 1;
           } else {
             break;
